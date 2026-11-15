@@ -1,0 +1,45 @@
+/* src/index.css */
+@import "tailwindcss";
+
+@plugin "daisyui" {
+  themes: pluvia --default;
+}
+
+/* Tema oscuro propio inspirado en la referencia: índigo/violeta + acentos naranja y menta */
+@plugin "daisyui/theme" {
+  name: "pluvia";
+  default: true;
+  prefersdark: true;
+  color-scheme: dark;
+
+  --color-base-100: #14142b;
+  --color-base-200: #0d0d20;
+  --color-base-300: #1f1f42;
+  --color-base-content: #e9e9ff;
+
+  --color-primary: #6d5dfc;
+  --color-primary-content: #ffffff;
+  --color-secondary: #f59e0b;
+  --color-secondary-content: #1a1000;
+  --color-accent: #2dd4bf;
+  --color-accent-content: #04201c;
+  --color-neutral: #25254d;
+  --color-neutral-content: #e9e9ff;
+
+  --color-info: #38bdf8;
+  --color-info-content: #021824;
+  --color-success: #22c55e;
+  --color-success-content: #03170a;
+  --color-warning: #fbbf24;
+  --color-warning-content: #1f1500;
+  --color-error: #f43f5e;
+  --color-error-content: #ffffff;
+
+  --radius-selector: 1rem;
+  --radius-field: 1rem;
+  --radius-box: 1.5rem;
+}
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+}
