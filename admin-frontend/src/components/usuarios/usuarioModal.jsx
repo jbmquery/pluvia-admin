@@ -4,10 +4,14 @@ import { AtSign, Info, Mail, Phone, User } from 'lucide-react'
 import SideDrawer from '../general/sideDrawerComponent'
 import InputField from '../general/inputFieldComponent'
 import SelectField from '../general/selectFieldComponent'
-import ToggleField from '../general/toggleFieldComponent'
 import FormDrawerFooter from '../general/formDrawerFooterComponent'
 
 const FORM_ID = 'usuario-form'
+
+const ESTADO_OPTIONS = [
+  { value: 'true', label: 'Activo' },
+  { value: 'false', label: 'Inactivo' },
+]
 
 const toForm = (row) => ({
   nombres: row?.nombres ?? '',
@@ -16,7 +20,7 @@ const toForm = (row) => ({
   apodo: row?.apodo ?? '',
   correo: row?.correo ?? '',
   tipo_usuario: row ? String(row.tipo_usuario) : '',
-  estado: row?.estado ?? true,
+  estado: String(row?.estado ?? true),
   celular: row?.celular ?? '',
   fecha_nacimiento: row?.fecha_nacimiento ?? '',
   fecha_contratacion: row?.fecha_contratacion ?? '',
@@ -36,6 +40,7 @@ function UsuarioForm({ row, nivelOptions, lockSelf, defaultPassword, onSave }) {
     onSave({
       ...form,
       tipo_usuario: Number(form.tipo_usuario),
+      estado: form.estado === 'true',
       celular: form.celular.trim() || null,
       fecha_nacimiento: form.fecha_nacimiento || null,
       fecha_contratacion: form.fecha_contratacion || null,
@@ -68,7 +73,7 @@ function UsuarioForm({ row, nivelOptions, lockSelf, defaultPassword, onSave }) {
         required
         disabled={lockSelf}
       />
-      <ToggleField label="Usuario activo" name="estado" checked={form.estado} onChange={handleChange} disabled={lockSelf} />
+      <SelectField label="Estado" name="estado" value={form.estado} onChange={handleChange} options={ESTADO_OPTIONS} placeholder={null} disabled={lockSelf} />
       <InputField label="Celular (opcional)" icon={Phone} type="tel" name="celular" value={form.celular} onChange={handleChange} maxLength={20} />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <InputField label="Fecha de nacimiento" type="date" name="fecha_nacimiento" value={form.fecha_nacimiento} onChange={handleChange} />

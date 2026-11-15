@@ -57,7 +57,7 @@ export default function DataTable({
             </div>
             <ul
               tabIndex={0}
-              className="dropdown-content z-20 mt-2 max-h-72 w-60 overflow-y-auto rounded-2xl border border-white/10 bg-base-100 p-2 shadow-xl"
+              className="dropdown-content z-20 mt-2 max-h-72 w-60 overflow-y-auto rounded-2xl border border-white/10 bg-base-300 p-2 opacity-100 shadow-2xl"
             >
               {columns.map((c) => (
                 <li key={c.key}>
@@ -128,7 +128,7 @@ export default function DataTable({
         </p>
         <div className="flex items-center gap-3">
           <select
-            className="select select-sm w-auto border-white/10 bg-base-300/60"
+            className="select select-sm w-auto border-white/10 bg-base-300 [&>option]:bg-base-300 [&>option]:text-base-content"
             value={pageSize}
             onChange={(e) => {
               setPageSize(Number(e.target.value))

@@ -4,10 +4,14 @@ import { Banknote, Clock, FileText } from 'lucide-react'
 import SideDrawer from '../general/sideDrawerComponent'
 import InputField from '../general/inputFieldComponent'
 import SelectField from '../general/selectFieldComponent'
-import ToggleField from '../general/toggleFieldComponent'
 import FormDrawerFooter from '../general/formDrawerFooterComponent'
 
 const FORM_ID = 'empleado-form'
+
+const ESTADO_OPTIONS = [
+  { value: 'true', label: 'Activo' },
+  { value: 'false', label: 'Inactivo' },
+]
 
 const toForm = (row) => ({
   id_usuario: row ? String(row.id_usuario) : '',
@@ -16,7 +20,7 @@ const toForm = (row) => ({
   tipo_contrato: row?.tipo_contrato ?? '',
   fecha_inicio: row?.fecha_inicio ?? '',
   fecha_fin: row?.fecha_fin ?? '',
-  estado: row?.estado ?? true,
+  estado: String(row?.estado ?? true),
   tipo_usuario: row?.tipo_usuario != null ? String(row.tipo_usuario) : '',
   observacion: row?.observacion ?? '',
   turno_referencia: row?.turno_referencia ?? '',
@@ -39,7 +43,7 @@ function EmpleadoForm({ row, usuarioOptions, sedeOptions, nivelOptions, onSave }
       tipo_contrato: form.tipo_contrato.trim() || null,
       fecha_inicio: form.fecha_inicio,
       fecha_fin: form.fecha_fin || null,
-      estado: form.estado,
+      estado: form.estado === 'true',
       tipo_usuario: form.tipo_usuario ? Number(form.tipo_usuario) : null,
       observacion: form.observacion.trim() || null,
       turno_referencia: form.turno_referencia.trim() || null,
@@ -58,7 +62,7 @@ function EmpleadoForm({ row, usuarioOptions, sedeOptions, nivelOptions, onSave }
         <InputField label="Fecha de inicio" type="date" name="fecha_inicio" value={form.fecha_inicio} onChange={handleChange} required />
         <InputField label="Fecha fin" type="date" name="fecha_fin" value={form.fecha_fin} onChange={handleChange} min={form.fecha_inicio || undefined} />
       </div>
-      <ToggleField label="Empleado activo" name="estado" checked={form.estado} onChange={handleChange} />
+      <SelectField label="Estado" name="estado" value={form.estado} onChange={handleChange} options={ESTADO_OPTIONS} placeholder={null} />
       <div className="w-full">
         <label htmlFor="empleado-observacion" className="mb-1.5 block text-sm font-medium text-base-content/80">
           Observación (opcional)
