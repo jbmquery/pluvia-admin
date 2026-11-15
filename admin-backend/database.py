@@ -34,7 +34,7 @@ def run_query(sql, params=None, fetch="all", sensitive=False):
     por ejemplo: [SQL] SELECT * FROM usuarios WHERE correo = 'a@b.com'  -- 1.2 ms | 1 fila(s)
 
     fetch: "all" -> lista de dicts | "one" -> dict o None | None -> filas afectadas
-    sensitive=True oculta los parámetros en el log (contraseñas, hashes).
+    sensitive=True oculta todos los parámetros en el log; sensitive=(5,) oculta solo el parámetro #5.
     Siempre usa parámetros (%s): nunca concatenes valores dentro del SQL.
     """
     conn = get_connection()
@@ -43,8 +43,11 @@ def run_query(sql, params=None, fetch="all", sensitive=False):
             with conn.cursor(cursor_factory=RealDictCursor) as cur:
                 if params is None:
                     shown = sql
-                elif sensitive:
+                elif sensitive is True:
                     shown = f"{sql}  [parámetros ocultos]"
+                elif sensitive:  # tupla con las posiciones a ocultar, ej. (5,)
+                    masked = tuple("***" if i in sensitive else p for i, p in enumerate(params))
+                    shown = cur.mogrify(sql, masked).decode("utf-8")
                 else:
                     shown = cur.mogrify(sql, params).decode("utf-8")
 

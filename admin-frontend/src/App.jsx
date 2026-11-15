@@ -6,6 +6,7 @@ import { ProtectedRoute, PublicRoute } from './routes/guards'
 import LoginPage from './pages/loginPage'
 import RestaurarLoginPage from './pages/restaurarLoginPage'
 import DashboardPage from './pages/dashboardPage'
+import UsuariosPage from './pages/usuariosPage'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
 
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/usuarios" element={<UsuariosPage />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/dashboard" replace />} />

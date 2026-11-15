@@ -22,3 +22,6 @@ MAX_LOGIN_ATTEMPTS = 5
 LOGIN_LOCK_SECONDS = 15 * 60
 
 SHOW_SQL = os.getenv("SHOW_SQL", "true").lower() == "true"
+
+# Contraseña inicial al crear un usuario o al restablecerla desde el panel
+DEFAULT_USER_PASSWORD = "123456"
