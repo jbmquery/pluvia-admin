@@ -7,6 +7,9 @@ export const formatDate = (iso) => {
   return `${d}/${m}/${y}`
 }
 
+// "14:30:00" -> "14:30"
+export const formatTime = (t) => (t ? String(t).slice(0, 5) : '—')
+
 export const formatMoney = (n) =>
   n === null || n === undefined
     ? '—'

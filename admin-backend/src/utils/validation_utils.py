@@ -1,5 +1,6 @@
 # src/utils/validation_utils.py
-from datetime import date
+import math
+from datetime import date, time
 from decimal import Decimal, InvalidOperation
 
 from src.utils.errors import AppError
@@ -17,7 +18,7 @@ def get_str(data, key, label, max_len, required=True):
     return value
 
 
-def get_int(data, key, label, required=True, minimum=None):
+def get_int(data, key, label, required=True, minimum=None, maximum=None):
     raw = data.get(key)
     if raw is None or (isinstance(raw, str) and not raw.strip()):
         if required:
@@ -31,6 +32,27 @@ def get_int(data, key, label, required=True, minimum=None):
         raise AppError(f"{label} debe ser un número entero.")
     if minimum is not None and value < minimum:
         raise AppError(f"{label} no puede ser menor que {minimum}.")
+    if maximum is not None and value > maximum:
+        raise AppError(f"{label} no puede ser mayor que {maximum}.")
+    return value
+
+
+def get_float(data, key, label, minimum, maximum, required=False):
+    raw = data.get(key)
+    if raw is None or (isinstance(raw, str) and not raw.strip()):
+        if required:
+            raise AppError(f"{label} es obligatorio.")
+        return None
+    if isinstance(raw, bool):
+        raise AppError(f"{label} debe ser un número.")
+    try:
+        value = float(raw)
+    except (TypeError, ValueError):
+        raise AppError(f"{label} debe ser un número.")
+    if not math.isfinite(value):
+        raise AppError(f"{label} debe ser un número.")
+    if value < minimum or value > maximum:
+        raise AppError(f"{label} debe estar entre {minimum} y {maximum}.")
     return value
 
 
@@ -51,6 +73,18 @@ def get_date(data, key, label, required=False):
         return date.fromisoformat(str(raw).strip())
     except ValueError:
         raise AppError(f"{label} no es una fecha válida.")
+
+
+def get_time(data, key, label, required=True):
+    raw = data.get(key)
+    if raw is None or str(raw).strip() == "":
+        if required:
+            raise AppError(f"{label} es obligatoria.")
+        return None
+    try:
+        return time.fromisoformat(str(raw).strip())
+    except ValueError:
+        raise AppError(f"{label} no es una hora válida (formato HH:MM).")
 
 
 def get_decimal(data, key, label, required=False, maximum=Decimal("99999999.99")):

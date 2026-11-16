@@ -5,6 +5,7 @@ from flask_cors import CORS
 import config
 from src.hooks.request_hooks import register_hooks
 from src.routes.login_routes import login_bp
+from src.routes.sedes_turnos_routes import sedes_turnos_bp
 from src.routes.usuarios_routes import usuarios_bp
 
 app = Flask(__name__)
@@ -16,6 +17,7 @@ CORS(app, origins=config.FRONTEND_ORIGINS, supports_credentials=True)
 register_hooks(app)
 app.register_blueprint(login_bp)
 app.register_blueprint(usuarios_bp)
+app.register_blueprint(sedes_turnos_bp)
 
 
 @app.route("/", methods=["GET"])

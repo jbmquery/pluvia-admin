@@ -1,12 +1,12 @@
 # src/utils/serialize_utils.py
-from datetime import date, datetime
+from datetime import date, datetime, time
 from decimal import Decimal
 
 
 def serialize_row(row):
     out = {}
     for key, value in row.items():
-        if isinstance(value, (date, datetime)):
+        if isinstance(value, (date, datetime, time)):
             out[key] = value.isoformat()
         elif isinstance(value, Decimal):
             out[key] = float(value)

@@ -7,6 +7,15 @@ import psycopg2.errors as pg_errors
 from src.utils.response_utils import fail
 
 
+# restricción de clave primaria -> (tabla, script SQL que sincroniza su secuencia)
+SECUENCIAS = {
+    "usuarios_pkey": ("usuarios", "002_sincronizar_secuencias.sql"),
+    "empleados_pkey": ("empleados", "002_sincronizar_secuencias.sql"),
+    "sedes_pkey": ("sedes", "003_sincronizar_secuencias_sedes_turnos.sql"),
+    "turnos_pkey": ("turnos", "003_sincronizar_secuencias_sedes_turnos.sql"),
+}
+
+
 class AppError(Exception):
     """Error controlado: el mensaje se muestra tal cual al usuario (toast)."""
 
@@ -28,10 +37,10 @@ def handle_errors(view):
         except pg_errors.UniqueViolation as ex:
             name = getattr(ex.diag, "constraint_name", None)
             print(f"[DB] UniqueViolation en la restricción: {name} -> {ex.diag.message_detail}", flush=True)
-            if name in ("usuarios_pkey", "empleados_pkey"):
-                tabla = "usuarios" if name == "usuarios_pkey" else "empleados"
+            if name in SECUENCIAS:
+                tabla, script = SECUENCIAS[name]
                 msg = (f"No se pudo generar el ID automático en {tabla}: la secuencia está desfasada respecto a "
-                       "los datos existentes. Ejecuta sql/002_sincronizar_secuencias.sql una vez.")
+                       f"los datos existentes. Ejecuta sql/{script} una vez.")
             elif name == "niveles_usuarios_pkey":
                 msg = "Ya existe un nivel con ese ID."
             else:
