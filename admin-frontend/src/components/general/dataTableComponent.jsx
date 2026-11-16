@@ -16,6 +16,8 @@ export default function DataTable({
   addLabel = 'Añadir',
   emptyText = 'No se encontraron resultados.',
   resetKey, // al cambiar (nuevo filtro aplicado) vuelve a la página 1
+  toolbarExtra, // botones extra entre «Columnas» y «Añadir»
+  onVisibleChange, // recibe las claves de las columnas visibles (para exportar)
 }) {
   const [visible, setVisible] = useState(() => new Set(defaultVisible ?? columns.map((c) => c.key)))
   const [page, setPage] = useState(1)
@@ -24,6 +26,11 @@ export default function DataTable({
   useEffect(() => {
     setPage(1)
   }, [resetKey])
+
+  useEffect(() => {
+    onVisibleChange?.(columns.filter((c) => visible.has(c.key)).map((c) => c.key))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visible])
 
   const totalPages = Math.max(1, Math.ceil(rows.length / pageSize))
   const current = Math.min(page, totalPages)
@@ -49,7 +56,7 @@ export default function DataTable({
           {title} <span className="font-normal text-base-content/60">({rows.length})</span>
         </h2>
 
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex flex-wrap items-center justify-end gap-2">
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-ghost border-white/10">
               <Columns3 className="size-4" />
@@ -74,6 +81,8 @@ export default function DataTable({
               ))}
             </ul>
           </div>
+
+          {toolbarExtra}
 
           {onAdd && (
             <button type="button" className="btn btn-primary" onClick={onAdd}>

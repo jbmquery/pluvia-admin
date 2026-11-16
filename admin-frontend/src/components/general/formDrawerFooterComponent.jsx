@@ -5,7 +5,7 @@ import { Trash2 } from 'lucide-react'
 export default function FormDrawerFooter({ formId, isEdit, saving, canDelete = true, onClose, onDelete }) {
   return (
     <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-      {isEdit && (
+      {isEdit && onDelete && (
         <button
           type="button"
           className="btn btn-outline btn-error sm:mr-auto"

@@ -103,19 +103,23 @@ def eliminar_sede(id_sede):
     _check_sede_existe(id_sede)
     c = _uno(
         """
-        SELECT (SELECT COUNT(*) FROM public.turnos    WHERE id_sede = %s) AS turnos,
-               (SELECT COUNT(*) FROM public.empleados WHERE id_sede = %s) AS empleados
+        SELECT (SELECT COUNT(*) FROM public.turnos      WHERE id_sede = %s) AS turnos,
+               (SELECT COUNT(*) FROM public.empleados   WHERE id_sede = %s) AS empleados,
+               (SELECT COUNT(*) FROM public.asistencias WHERE id_sede = %s) AS asistencias
         """,
-        (id_sede, id_sede),
+        (id_sede, id_sede, id_sede),
     )
     partes = []
     if c["turnos"]:
         partes.append(f"{c['turnos']} turno(s)")
     if c["empleados"]:
         partes.append(f"{c['empleados']} empleado(s)")
+    if c["asistencias"]:
+        partes.append(f"{c['asistencias']} asistencia(s)")
     if partes:
+        lista = partes[0] if len(partes) == 1 else ", ".join(partes[:-1]) + " y " + partes[-1]
         raise AppError(
-            f"No se puede eliminar: la sede tiene {' y '.join(partes)} asociado(s). "
+            f"No se puede eliminar: la sede tiene {lista} asociado(s). "
             "Elimínalos o reasígnalos primero.", 409)
 
     # La BD borraría turnos y empleados en cascada: este DELETE solo procede si no hay ninguno
@@ -125,8 +129,9 @@ def eliminar_sede(id_sede):
         WHERE id_sede = %s
           AND NOT EXISTS (SELECT 1 FROM public.turnos    WHERE id_sede = %s)
           AND NOT EXISTS (SELECT 1 FROM public.empleados WHERE id_sede = %s)
+          AND NOT EXISTS (SELECT 1 FROM public.asistencias WHERE id_sede = %s)
         """,
-        (id_sede, id_sede, id_sede),
+        (id_sede, id_sede, id_sede, id_sede),
         fetch=None,
     )
     if not borrados:
@@ -172,4 +177,7 @@ def actualizar_turno(id_turno, d):
 
 def eliminar_turno(id_turno):
     _check_turno_existe(id_turno)
+    n = _uno("SELECT COUNT(*) AS n FROM public.asistencias WHERE id_turno = %s", (id_turno,))["n"]
+    if n:
+        raise AppError(f"No se puede eliminar: el turno tiene {n} asistencia(s) registrada(s).", 409)
     run_query("DELETE FROM public.turnos WHERE id_turno = %s", (id_turno,), fetch=None)

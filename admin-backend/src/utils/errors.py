@@ -43,9 +43,17 @@ def handle_errors(view):
                        f"los datos existentes. Ejecuta sql/{script} una vez.")
             elif name == "niveles_usuarios_pkey":
                 msg = "Ya existe un nivel con ese ID."
+            elif name == "uq_asistencia_dia_turno_usuario":
+                msg = "Ya existe una asistencia de ese usuario para ese turno y esa fecha."
             else:
                 msg = f"Ya existe un registro con esos datos (restricción: {name})."
             return fail(msg, 409)
+        except pg_errors.CheckViolation as ex:
+            name = getattr(ex.diag, "constraint_name", None)
+            print(f"[DB] CheckViolation en la restricción: {name}", flush=True)
+            if name == "chk_estado_asistencia":
+                return fail("El estado de asistencia no es válido.", 400)
+            return fail("Algún valor no cumple las reglas de la base de datos.", 400)
         except pg_errors.NotNullViolation as ex:
             col = getattr(ex.diag, "column_name", None)
             if col == "id_usuario":

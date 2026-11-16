@@ -41,7 +41,7 @@ export function ToastProvider({ children }) {
     <ToastContext.Provider value={api}>
       {children}
       <div
-        className="toast toast-top toast-center z-[100] max-w-[92vw] sm:max-w-md"
+        className="toast toast-top toast-center z-[1100] max-w-[92vw] sm:max-w-md"
         role="status"
         aria-live="polite"
       >

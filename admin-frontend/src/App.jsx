@@ -8,6 +8,7 @@ import RestaurarLoginPage from './pages/restaurarLoginPage'
 import DashboardPage from './pages/dashboardPage'
 import UsuariosPage from './pages/usuariosPage'
 import SedesTurnosPage from './pages/sedesTurnosPage'
+import AsistenciasPage from './pages/asistenciasPage'
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/usuarios" element={<UsuariosPage />} />
             <Route path="/sedes-turnos" element={<SedesTurnosPage />} />
+            <Route path="/asistencias" element={<AsistenciasPage />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/dashboard" replace />} />

@@ -1,13 +1,14 @@
 // src/components/general/sidebarComponent.jsx
 // Desktop (lg+): barra fija a la izquierda. Mobile/tablet: panel deslizable con fondo oscuro.
 import { NavLink } from 'react-router-dom'
-import { Building2, LayoutDashboard, Users, X } from 'lucide-react'
+import { Building2, CalendarCheck, LayoutDashboard, Users, X } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 
 const ITEMS = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/usuarios', label: 'Usuarios', icon: Users },
   { to: '/sedes-turnos', label: 'Sedes y turnos', icon: Building2 },
+  { to: '/asistencias', label: 'Asistencias', icon: CalendarCheck },
 ]
 
 export default function Sidebar({ open, onClose }) {
