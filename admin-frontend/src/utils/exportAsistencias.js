@@ -152,8 +152,10 @@ export async function buildPdf({ rows, columns, periodo, generadoPor, logoDataUr
       alternateRowStyles: { fillColor: [244, 244, 252] },
     })
 
-    // Resumen: contadores por estado y totales
+    // Resumen: contadores por estado y totales.
+    // Los totales de minutos solo salen si su columna calculada está visible en el reporte.
     const s = buildSummary(g.rows)
+    const visibles = new Set(columns.map((c) => c.key))
     autoTable(doc, {
       startY: finalY() + 6,
       margin: { left: margin, right: margin },
@@ -162,8 +164,8 @@ export async function buildPdf({ rows, columns, periodo, generadoPor, logoDataUr
       body: [
         ...s.porEstado.map((e) => [e.label, String(e.n)]),
         ['Total de registros', String(s.total)],
-        ['Total minutos de tardanza', String(s.tardanza)],
-        ['Total minutos extras', String(s.extras)],
+        ...(visibles.has('minutos_tardanza') ? [['Total minutos de tardanza', String(s.tardanza)]] : []),
+        ...(visibles.has('minutos_extras') ? [['Total minutos extras', String(s.extras)]] : []),
         ['Registros sin entrada marcada', String(s.sinEntrada)],
         ['Registros sin salida marcada', String(s.sinSalida)],
       ],

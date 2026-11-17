@@ -11,14 +11,18 @@ import { ESTADOS } from '../../utils/asistenciasUtils'
 
 const FORM_ID = 'asistencia-form'
 
+// PostgreSQL devuelve las horas con fracciones ("08:20:31.482913") y <input type="time"> solo acepta
+// hasta 3 decimales: con 6 se queda vacío. Se muestran como HH:MM:SS.
+const hms = (t) => (t ? String(t).slice(0, 8) : '')
+
 const toForm = (row) => ({
   id_sede: String(row.id_sede),
   id_turno: String(row.id_turno),
   fecha: row.fecha,
-  hora_entrada_horario: row.hora_entrada_horario ?? '',
-  hora_salida_horario: row.hora_salida_horario ?? '',
-  hora_entrada_real: row.hora_entrada_real ?? '',
-  hora_salida_real: row.hora_salida_real ?? '',
+  hora_entrada_horario: hms(row.hora_entrada_horario),
+  hora_salida_horario: hms(row.hora_salida_horario),
+  hora_entrada_real: hms(row.hora_entrada_real),
+  hora_salida_real: hms(row.hora_salida_real),
   estado_asistencia: row.estado_asistencia,
   observacion: row.observacion ?? '',
 })
@@ -44,8 +48,8 @@ function AsistenciaForm({ row, sedes, turnos, onSave }) {
     setForm((f) => ({
       ...f,
       id_turno: e.target.value,
-      hora_entrada_horario: turno ? turno.hora_inicio : f.hora_entrada_horario,
-      hora_salida_horario: turno ? turno.hora_fin : f.hora_salida_horario,
+      hora_entrada_horario: turno ? hms(turno.hora_inicio) : f.hora_entrada_horario,
+      hora_salida_horario: turno ? hms(turno.hora_fin) : f.hora_salida_horario,
     }))
   }
 
@@ -55,14 +59,16 @@ function AsistenciaForm({ row, sedes, turnos, onSave }) {
       toast.error('La observación es obligatoria para actualizar una asistencia.')
       return
     }
+    // Si el usuario no tocó una hora, se envía el valor original (conserva los decimales de la marca)
+    const hora = (campo) => (form[campo] === hms(row[campo]) ? (row[campo] ?? null) : form[campo] || null)
     onSave({
       id_sede: Number(form.id_sede),
       id_turno: Number(form.id_turno),
       fecha: form.fecha,
-      hora_entrada_horario: form.hora_entrada_horario,
-      hora_salida_horario: form.hora_salida_horario,
-      hora_entrada_real: form.hora_entrada_real || null,
-      hora_salida_real: form.hora_salida_real || null,
+      hora_entrada_horario: hora('hora_entrada_horario'),
+      hora_salida_horario: hora('hora_salida_horario'),
+      hora_entrada_real: hora('hora_entrada_real'),
+      hora_salida_real: hora('hora_salida_real'),
       estado_asistencia: form.estado_asistencia,
       observacion: form.observacion.trim(),
     })
