@@ -9,6 +9,7 @@ import DashboardPage from './pages/dashboardPage'
 import UsuariosPage from './pages/usuariosPage'
 import SedesTurnosPage from './pages/sedesTurnosPage'
 import AsistenciasPage from './pages/asistenciasPage'
+import CartaPage from './pages/cartaPage'
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/usuarios" element={<UsuariosPage />} />
             <Route path="/sedes-turnos" element={<SedesTurnosPage />} />
             <Route path="/asistencias" element={<AsistenciasPage />} />
+            <Route path="/carta" element={<CartaPage />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/dashboard" replace />} />

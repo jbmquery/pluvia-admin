@@ -13,6 +13,9 @@ SECUENCIAS = {
     "empleados_pkey": ("empleados", "002_sincronizar_secuencias.sql"),
     "sedes_pkey": ("sedes", "003_sincronizar_secuencias_sedes_turnos.sql"),
     "turnos_pkey": ("turnos", "003_sincronizar_secuencias_sedes_turnos.sql"),
+    "carta_pkey": ("carta", "004_sincronizar_secuencias_carta.sql"),
+    "categorias_pkey": ("categorías", "004_sincronizar_secuencias_carta.sql"),
+    "sub_categorias_pkey": ("subcategorías", "004_sincronizar_secuencias_carta.sql"),
 }
 
 
