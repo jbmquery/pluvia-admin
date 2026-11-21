@@ -1,6 +1,6 @@
 # src/utils/validation_utils.py
 import math
-from datetime import date, time
+from datetime import date, datetime, time
 from decimal import Decimal, InvalidOperation
 
 from src.utils.errors import AppError
@@ -97,6 +97,18 @@ def get_time(data, key, label, required=True):
         return time.fromisoformat(str(raw).strip())
     except ValueError:
         raise AppError(f"{label} no es una hora válida (formato HH:MM).")
+
+
+def get_datetime(data, key, label, required=True):
+    raw = data.get(key)
+    if raw is None or str(raw).strip() == "":
+        if required:
+            raise AppError(_oblig(label))
+        return None
+    try:
+        return datetime.fromisoformat(str(raw).strip().replace(" ", "T"))
+    except ValueError:
+        raise AppError(f"{label} no es una fecha y hora válida.")
 
 
 def get_decimal(data, key, label, required=False, maximum=Decimal("99999999.99")):

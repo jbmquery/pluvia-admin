@@ -10,6 +10,7 @@ import UsuariosPage from './pages/usuariosPage'
 import SedesTurnosPage from './pages/sedesTurnosPage'
 import AsistenciasPage from './pages/asistenciasPage'
 import CartaPage from './pages/cartaPage'
+import PedidosPagosPage from './pages/pedidosPagosPage'
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="/sedes-turnos" element={<SedesTurnosPage />} />
             <Route path="/asistencias" element={<AsistenciasPage />} />
             <Route path="/carta" element={<CartaPage />} />
+            <Route path="/pedidos-pagos" element={<PedidosPagosPage />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/dashboard" replace />} />

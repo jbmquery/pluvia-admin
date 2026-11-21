@@ -7,6 +7,7 @@ from src.hooks.request_hooks import register_hooks
 from src.routes.asistencias_routes import asistencias_bp
 from src.routes.carta_routes import carta_bp
 from src.routes.login_routes import login_bp
+from src.routes.pedidos_pagos_routes import pedidos_pagos_bp
 from src.routes.sedes_turnos_routes import sedes_turnos_bp
 from src.routes.usuarios_routes import usuarios_bp
 
@@ -22,6 +23,7 @@ app.register_blueprint(usuarios_bp)
 app.register_blueprint(sedes_turnos_bp)
 app.register_blueprint(asistencias_bp)
 app.register_blueprint(carta_bp)
+app.register_blueprint(pedidos_pagos_bp)
 
 
 @app.route("/", methods=["GET"])

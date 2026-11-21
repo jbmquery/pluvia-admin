@@ -114,7 +114,9 @@ def actualizar_plato(id_carta, d):
 def eliminar_plato(id_carta):
     if not _uno("SELECT 1 AS ok FROM public.carta WHERE id_carta = %s", (id_carta,)):
         raise AppError("El plato no existe.", 404)
-    # Si otra tabla referencia al plato, el error de clave foránea se informa en el toast
+    n = _uno("SELECT COUNT(*) AS n FROM public.detalle_pedido WHERE id_carta = %s", (id_carta,))["n"]
+    if n:
+        raise AppError(f"No se puede eliminar: el plato aparece en {n} detalle(s) de pedido.", 409)
     run_query("DELETE FROM public.carta WHERE id_carta = %s", (id_carta,), fetch=None)
 
 

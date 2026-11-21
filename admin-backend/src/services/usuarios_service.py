@@ -159,6 +159,10 @@ def eliminar_usuario(actor, id_usuario):
             f"No se puede eliminar: el usuario tiene {n} registro(s) de empleado asociado(s). "
             "Elimínalos primero en la pestaña Empleados.", 409)
 
+    n_ped = _uno("SELECT COUNT(*) AS n FROM public.pedidos WHERE id_usuario = %s", (id_usuario,))["n"]
+    if n_ped:
+        raise AppError(f"No se puede eliminar: el usuario tiene {n_ped} pedido(s) registrado(s).", 409)
+
     n_asis = _uno("SELECT COUNT(*) AS n FROM public.asistencias WHERE id_usuario = %s", (id_usuario,))["n"]
     if n_asis:
         raise AppError(f"No se puede eliminar: el usuario tiene {n_asis} asistencia(s) registrada(s).", 409)
